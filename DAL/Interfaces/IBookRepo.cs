@@ -1,0 +1,17 @@
+﻿using DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Interfaces
+{
+    public interface IBookRepo
+    {
+        List<Book> GetAll();
+        void Add(Book book);
+        void Update(Book book);
+        void Delete(int bookId);
+    }
+}
