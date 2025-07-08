@@ -51,10 +51,24 @@ namespace BookBorrowingSystem.Pages.Authen.Login
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true, // Set to true if you want the user to remain logged in
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Set the expiration time for the cookie
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Set thex expiration time for the cookie
             };
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authProperties);
-            return RedirectToPage("/Index"); // Redirect to a different page after successful login
+
+            //Redirect theo Role
+            if (account.Role == "Admin")
+            {
+                return RedirectToPage("/Account/Index");
+            }
+            if (account.Role == "Librarian")
+            {
+                return RedirectToPage("/Request/Index");
+            }
+            if (account.Role == "Student")
+            {
+                return RedirectToPage("/Book/Index");
+            }
+            return RedirectToPage("/Index");
         }
     }
 }
