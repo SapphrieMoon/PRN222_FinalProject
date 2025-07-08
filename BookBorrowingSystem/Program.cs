@@ -24,13 +24,17 @@ namespace BookBorrowingSystem
             builder .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Login"; // Đường dẫn đến trang đăng nhập
-                    options.LogoutPath = "/Authen/Login/Logout"; // Đường dẫn đến trang đăng xuất
+                    options.LoginPath = "/Authen/Login/Index"; // Đường dẫn đến trang đăng nhập
+                    options.LogoutPath = "/Authen/Logout/Logout"; // Đường dẫn đến trang đăng xuất
                     options.AccessDeniedPath = "/Authen/Login/Index"; // Đường dẫn đến trang từ chối truy cập
                 });
             //-------------------------------------------- Account ---------------------------------------------------------------------
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+
+            //-------------------------------------------- Book ------------------------------------------------------------------------
+            builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<IBookRepo, BookRepo>();
 
             var app = builder.Build();
 
