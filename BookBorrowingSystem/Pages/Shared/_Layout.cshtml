@@ -27,6 +27,13 @@
                         </li>
                     </ul>
                 </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span class="me-2">Hello, @User.Identity.Name!</span>
+                    <form method="get" asp-page="/Authen/Logout/Index" class="d-inline">
+                        <button type="submit" class="btn btn-link">Logout</button>
+                    </form>
+                }
             </div>
         </nav>
     </header>
