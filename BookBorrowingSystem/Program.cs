@@ -35,6 +35,9 @@ namespace BookBorrowingSystem
             //-------------------------------------------- Book ------------------------------------------------------------------------
             builder.Services.AddScoped<IBookService, BookService>();
             builder.Services.AddScoped<IBookRepo, BookRepo>();
+            //-------------------------------------------- Request --------------------------------------------------------------------
+            builder.Services.AddScoped<IRequestService, RequestService>();
+            builder.Services.AddScoped<IRequestRepo, RequestRepo>();
 
             var app = builder.Build();
 

@@ -1,6 +1,50 @@
 ﻿@page 
 @model BookBorrowingSystem.Pages.Request.IndexModel
 @{
+    ViewData["Title"] = "All Borrow Requests";
 }
 
-<div>Request</div>
+<h1 class="text-center my-4">All Borrow Requests</h1>
+
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Book ID</th>
+                <th>Account ID</th>
+                <th>Request Date</th>
+                <th>Borrow Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Processed By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Requests != null && Model.Requests.Count > 0)
+            {
+                int index = 1;
+                foreach (var req in Model.Requests)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@req.BookId</td>
+                        <td>@req.AccountId</td>
+                        <td>@req.RequestDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.BorrowDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.ReturnDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.Status</td>
+                        <td>@req.ProcessedById</td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No requests found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
