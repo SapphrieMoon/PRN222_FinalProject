@@ -19,6 +19,12 @@ namespace DAL.Repositories
         {
             return _context.Books.ToList(); // Assuming you want to return all books as a list
         }
+
+        public Book GetById(int id)
+        {
+            return _context.Books.Find(id); // Find book by ID
+        }
+
         public void Add(Book book)
         {
             _context.Books.Add(book);

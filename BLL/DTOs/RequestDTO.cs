@@ -15,6 +15,6 @@ namespace BLL.DTOs
         public DateTime BorrowDate { get; set; }
         public DateTime ReturnDate { get; set; }
         public string Status { get; set; } // e.g., "Pending", "Approved", "Rejected"
-        public int ProcessedById { get; set;  }
+        public int? ProcessedById { get; set;  }
     }
 }

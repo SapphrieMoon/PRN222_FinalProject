@@ -19,7 +19,7 @@ namespace DAL.Entities
         public DateTime ReturnDate { get; set; }
 
         public string Status { get; set; } = "PENDING"; // APPROVED, REJECTED, PENDING
-        public int ProcessedById { get; set; }
+        public int? ProcessedById { get; set; }
 
         public Book? Book { get; set; }
         public Account? Account { get; set; }

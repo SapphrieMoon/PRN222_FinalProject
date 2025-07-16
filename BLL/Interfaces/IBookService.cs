@@ -10,6 +10,7 @@ namespace BLL.Interfaces
     public interface IBookService
     {
         List<BookDTO> GetAllBooks();
+        BookDTO GetBookById(int bookId);
         void AddBook(BookDTO book);
         void UpdateBook(BookDTO book);
         void DeleteBook(int bookId);
