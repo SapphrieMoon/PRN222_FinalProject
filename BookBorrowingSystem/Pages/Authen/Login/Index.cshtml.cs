@@ -41,6 +41,7 @@ namespace BookBorrowingSystem.Pages.Authen.Login
             }
             var claims = new List<Claim>
             {
+                new Claim("AccountId", account.AccountId.ToString()),
                 new Claim(ClaimTypes.Name, account.UserName),
                 new Claim(ClaimTypes.Email, account.Email),
                 new Claim(ClaimTypes.Role, account.Role),

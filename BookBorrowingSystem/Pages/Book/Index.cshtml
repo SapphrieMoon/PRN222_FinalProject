@@ -6,12 +6,16 @@
 
 <h1 class="text-center my-4">Book List</h1>
 
-<div class="container">
+<div class="container" >
+    
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var book in Model.Books)
         {
             <div class="col">
-                <div class="card h-100">
+                <div class="card h-100 book-card" 
+                    data-bs-toggle="modal"
+                    data-bs-target="#requestModal"
+                    data-book-id="@book.BookId">
                     @if (!string.IsNullOrEmpty(book.ImagePath))
                     {
                         <img src="@book.ImagePath" class="card-img-top" alt="Book cover">
@@ -30,3 +34,30 @@
         }
     </div>
 </div>
+
+<!--Modal-->
+<div class="modal fade" id="requestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="requestModalContent">
+            <!-- Nội dung form sẽ được load ở đây -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const modal = document.getElementById('requestModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+			
+            const card = event.relatedTarget;
+            const bookId = card.getAttribute('data-book-id');
+
+            fetch(`/Request/Create?bookId=${bookId}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('requestModalContent').innerHTML = html;
+                });
+        });
+    </script>
+}   
+

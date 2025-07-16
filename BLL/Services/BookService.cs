@@ -33,6 +33,21 @@ namespace BLL.Services
             }).ToList();
         }
 
+        public BookDTO GetBookById(int id)
+        {
+            var book = _repo.GetById(id);
+            if (book == null) return null;
+            return new BookDTO
+            {
+                BookId = book.BookId,
+                Title = book.Title,
+                Author = book.Author,
+                Quantity = book.Quantity,
+                Avaliable = book.Available,
+                ImagePath = book.ImagePath
+            };
+        }
+
         public void AddBook(BookDTO bookDto)
         {
             var book = new DAL.Entities.Book

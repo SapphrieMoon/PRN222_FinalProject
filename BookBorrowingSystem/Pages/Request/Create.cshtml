@@ -1,0 +1,60 @@
+﻿@page 
+@model BookBorrowingSystem.Pages.Request.CreateModel
+@{
+	Layout = null; // No layout for this page
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}
+<form method="post" asp-page="/Request/Create">
+    <div class="modal-header">
+        <input type="hidden" asp-for="Request.BookId" />
+        <input type="hidden" asp-for="Request.AccountId" />
+        <input type="hidden" asp-for="Request.Status" value="PENDING" />
+        <h5 class="modal-title">Borrow Book: @Model.Book.Title </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+
+        <div class="mb-3">
+            <label asp-for="Request.BorrowDate" class="form-label"></label>
+            <input asp-for="Request.BorrowDate" type="date" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Request.ReturnDate" class="form-label"></label>
+            <input asp-for="Request.ReturnDate" type="date" class="form-control" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+<!--Arlet-->
+@section Scripts {
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            fetch(form.action || window.location.href, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('requestModal'));
+                    modal.hide();
+                    alert("Request sent!");
+                }
+            });
+        });
+    </script>
+}
