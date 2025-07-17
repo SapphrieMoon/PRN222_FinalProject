@@ -42,7 +42,7 @@ namespace BookBorrowingSystem.Pages.Request
                 RequestDate = DateTime.Now,
                 BorrowDate = DateTime.Now.Date,                    // ✅ Hôm nay
                 ReturnDate = DateTime.Now.AddDays(7).Date,         // ✅ Trả sau 7 ngày
-                Status = "Pending",
+                Status = "PENDING",
             };
             return Page();
         }
@@ -60,7 +60,7 @@ namespace BookBorrowingSystem.Pages.Request
                 return Page();
             }
             Request.RequestDate = DateTime.Now;
-            Request.Status = "Pending";
+            Request.Status = "PENDING";
             Request.ProcessedById = null;
 
             _requestService.AddRequest(Request);
