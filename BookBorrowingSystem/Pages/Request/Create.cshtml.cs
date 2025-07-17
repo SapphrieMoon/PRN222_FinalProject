@@ -65,6 +65,13 @@ namespace BookBorrowingSystem.Pages.Request
 
             _requestService.AddRequest(Request);
 
+            var book = _bookService.GetBookById(Request.BookId);
+            if (book != null && book.Avaliable > 0)
+            {
+                book.Avaliable -= 1;
+                _bookService.UpdateBook(book);
+            }
+
             return RedirectToPage("/Book/Index");
             // return new JsonResult(new { success = true });
 
