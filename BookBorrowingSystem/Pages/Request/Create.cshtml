@@ -37,24 +37,4 @@
     </div>
 </form>
 
-<!--Arlet-->
-@section Scripts {
-    <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const form = e.target;
-            fetch(form.action || window.location.href, {
-                method: 'POST',
-                body: new FormData(form)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('requestModal'));
-                    modal.hide();
-                    alert("Request sent!");
-                }
-            });
-        });
-    </script>
-}
+
