@@ -73,7 +73,6 @@ namespace BookBorrowingSystem.Pages.Request
             }
 
             return RedirectToPage("/Book/Index");
-            // return new JsonResult(new { success = true });
 
         }
     }
