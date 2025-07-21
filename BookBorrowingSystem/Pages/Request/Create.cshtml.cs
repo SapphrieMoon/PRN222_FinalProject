@@ -40,9 +40,9 @@ namespace BookBorrowingSystem.Pages.Request
             {
                 BookId = bookId,
                 RequestDate = DateTime.Now,
-                BorrowDate = DateTime.Now.Date,                    // ✅ Hôm nay
+                BorrowDate = DateTime.Now.AddDays(1).Date,                    // ✅ Hôm nay
                 ReturnDate = DateTime.Now.AddDays(7).Date,         // ✅ Trả sau 7 ngày
-                Status = "PENDING",
+                Status = "Pending",
             };
             return Page();
         }
@@ -54,13 +54,20 @@ namespace BookBorrowingSystem.Pages.Request
             if (accountIdClaim != null)
                 Request.AccountId = int.Parse(accountIdClaim.Value);
 
+            // Kiểm tra logic mượn và trả
+            if (Request.ReturnDate <= Request.BorrowDate)
+            {
+                TempData["ErrorMessage"] = "Return date must be after borrow date.";
+                return RedirectToPage("/Book/Index");
+            }
+
             if (!ModelState.IsValid)
             {
                 Book = _bookService.GetBookById(Request.BookId);
                 return Page();
             }
             Request.RequestDate = DateTime.Now;
-            Request.Status = "PENDING";
+            Request.Status = "Pending";
             Request.ProcessedById = null;
 
             _requestService.AddRequest(Request);

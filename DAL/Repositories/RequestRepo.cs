@@ -1,5 +1,6 @@
 ﻿using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,14 @@ namespace DAL.Repositories
 
         public List<BorrowRequest> GetAll()
         {
-            return _context.BorrowRequests.ToList(); // Assuming you want to return all requests as a list
+            return _context.BorrowRequests.OrderByDescending(i => i.RequestId).ToList(); // Assuming you want to return all requests as a list
         }
 
         public BorrowRequest GetById(int requestId)
         {
-            return _context.BorrowRequests.Find(requestId); // Find the request by its ID
+            return _context.BorrowRequests
+                .AsNoTracking() //  thêm dòng này để không bị tracked
+                .FirstOrDefault(x => x.RequestId == requestId);
         }
 
         public void Add(BorrowRequest request)
