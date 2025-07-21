@@ -4,6 +4,10 @@
     ViewData["Title"] = "Book List";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/book.css" />
+</head>
+
 <h1 class="text-center my-4">Book List</h1>
 
 <div class="container" >
@@ -11,7 +15,7 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var book in Model.Books)
         {
-            <div class="col">
+            <div class="col" >
                 <div class="card h-100 book-card" 
                     @* data-bs-toggle="modal"
                     data-bs-target="#requestModal" *@
@@ -62,6 +66,13 @@
         </div>
     </div>
 </div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        alert('@TempData["ErrorMessage"]');
+    </script>
+}
 
 @section Scripts {
     <script>

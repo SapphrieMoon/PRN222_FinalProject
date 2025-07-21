@@ -16,7 +16,7 @@
     <div class="modal-header">
         <input type="hidden" asp-for="Request.BookId" />
         <input type="hidden" asp-for="Request.AccountId" />
-        <input type="hidden" asp-for="Request.Status" value="PENDING" />
+        <input type="hidden" asp-for="Request.Status" value="Pending" />
         <h5 class="modal-title">Borrow Book: @Model.Book.Title </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
@@ -24,11 +24,11 @@
 
         <div class="mb-3">
             <label asp-for="Request.BorrowDate" class="form-label"></label>
-            <input asp-for="Request.BorrowDate" type="date" class="form-control" />
+            <input asp-for="Request.BorrowDate" type="date" class="form-control" id="borrowDate" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
         </div>
         <div class="mb-3">
             <label asp-for="Request.ReturnDate" class="form-label"></label>
-            <input asp-for="Request.ReturnDate" type="date" class="form-control" />
+            <input asp-for="Request.ReturnDate" type="date" class="form-control" id="returnDate" min="@Model.Request.BorrowDate.AddDays(1).ToString("yyyy-MM-dd")" />
         </div>
     </div>
     <div class="modal-footer">
@@ -36,5 +36,37 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const borrowInput = document.getElementById('borrowDate');
+            const returnInput = document.getElementById('returnDate');
+
+            // Utility: định dạng yyyy-MM-dd
+            function toDateStr(d) {
+                return d.toISOString().split('T')[0];
+            }
+
+            // Khi người dùng chọn BorrowDate
+            borrowInput.addEventListener('change', function () {
+                const borrowDate = new Date(this.value);
+                if (isNaN(borrowDate)) return;
+
+                const minReturn = new Date(borrowDate);
+                minReturn.setDate(minReturn.getDate() + 1);
+
+                returnInput.min = toDateStr(minReturn);
+
+                // Nếu ngày return hiện tại < ngày min, thì cập nhật lại luôn
+                const currentReturn = new Date(returnInput.value);
+                if (isNaN(currentReturn) || currentReturn < minReturn) {
+                    returnInput.value = toDateStr(minReturn);
+                }
+            });
+        });
+    </script>
+}
+
 
 
