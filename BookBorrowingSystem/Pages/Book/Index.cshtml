@@ -13,9 +13,10 @@
         {
             <div class="col">
                 <div class="card h-100 book-card" 
-                    data-bs-toggle="modal"
-                    data-bs-target="#requestModal"
-                    data-book-id="@book.BookId">
+                    @* data-bs-toggle="modal"
+                    data-bs-target="#requestModal" *@
+                    data-book-id="@book.BookId"
+                     data-avaliable="@book.Avaliable">
                     @if (!string.IsNullOrEmpty(book.ImagePath))
                     {
                         <img src="@book.ImagePath" class="card-img-top" alt="Book cover">
@@ -44,20 +45,58 @@
     </div>
 </div>
 
+<!-- Modal cảnh báo: Sách đã hết -->
+<div class="modal fade" id="unavailableModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-warning">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title text-dark">Unavailable</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-dark">
+                Sorry, this book is currently unavailable for borrowing.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        const modal = document.getElementById('requestModal');
-        modal.addEventListener('show.bs.modal', function (event) {
-			
-            const card = event.relatedTarget;
-            const bookId = card.getAttribute('data-book-id');
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.book-card').forEach(card => {
+                card.addEventListener('click', async function () {
+                    const bookId = this.getAttribute('data-book-id');
+                    const avaliable = parseInt(this.getAttribute('data-avaliable'));
 
-            fetch(`/Request/Create?bookId=${bookId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('requestModalContent').innerHTML = html;
+                    if (avaliable <= 0) {
+                        const warningModal = new bootstrap.Modal(document.getElementById('unavailableModal'));
+                        warningModal.show();
+                        return;
+                    }
+
+                    // Trước khi mở, clear modal content cũ và gỡ modal-backdrop nếu có
+                    const modalContent = document.getElementById('requestModalContent');
+                    modalContent.innerHTML = "<div class='text-center p-5'>Loading...</div>";
+
+                    const response = await fetch(`/Request/Create?bookId=${bookId}`);
+                    const html = await response.text();
+                    modalContent.innerHTML = html;
+
+                    const requestModalEl = document.getElementById('requestModal');
+                    const requestModal = bootstrap.Modal.getOrCreateInstance(requestModalEl);
+                    requestModal.show();
+
+                    // 🧽 Gỡ modal backdrop nếu bị kẹt (dự phòng fallback sau khi đóng)
+                    requestModalEl.addEventListener('hidden.bs.modal', () => {
+                        document.querySelectorAll('.modal-backdrop').forEach(e => e.remove());
+                        document.body.classList.remove('modal-open');
+                        document.body.style = '';
+                    }, { once: true });
                 });
+            });
         });
     </script>
-}   
-
+}

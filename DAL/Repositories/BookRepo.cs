@@ -1,5 +1,6 @@
 ﻿using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,10 @@ namespace DAL.Repositories
 
         public Book GetById(int id)
         {
-            return _context.Books.Find(id); // Find book by ID
+            //return _context.Books.Find(id); // Find book by ID
+            return _context.Books
+                .AsNoTracking()
+                .FirstOrDefault(b => b.BookId == id);
         }
 
         public void Add(Book book)
