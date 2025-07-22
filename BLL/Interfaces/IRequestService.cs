@@ -9,7 +9,7 @@ namespace BLL.Interfaces
 {
     public interface IRequestService
     {
-        List<RequestDTO> GetAllRequests();
+        List<RequestDTO> GetAllRequests(int? requestId, string? accountUserName);
         RequestDTO GetRequestById(int requestId);
         void AddRequest(RequestDTO request);
         void UpdateRequest(RequestDTO request);

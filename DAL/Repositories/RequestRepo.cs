@@ -18,13 +18,25 @@ namespace DAL.Repositories
             _context = context;
         }
 
-        public List<BorrowRequest> GetAll()
+        public List<BorrowRequest> GetAll(int? requestId, string? accountUserName)
         {
-            return _context.BorrowRequests
+            var query = _context.BorrowRequests
                 .Include(r => r.Account)
                 .Include(r => r.ProcessedBy)
                 .OrderByDescending(i => i.RequestId)
-                .ToList();
+                .AsQueryable();
+
+            if (requestId.HasValue)
+            {
+                query = query.Where(r => r.RequestId == requestId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(accountUserName))
+            {
+                query = query.Where(r => r.Account.Username.Contains(accountUserName));
+            }
+
+            return query.ToList();
         }
 
         public BorrowRequest GetById(int requestId)

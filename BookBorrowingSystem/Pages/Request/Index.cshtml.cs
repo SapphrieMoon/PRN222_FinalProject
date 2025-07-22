@@ -24,9 +24,15 @@ namespace BookBorrowingSystem.Pages.Request
         public int TotalPages { get; set; }
         public List<AccountResDTO> Accounts { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int? SearchRequestId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchUserName { get; set; }
+
         public void OnGet(int pageNumber = 1)
         {
-            var allRequests = _service.GetAllRequests();
+            var allRequests = _service.GetAllRequests(SearchRequestId, SearchUserName);
             int totalRequests = allRequests.Count;
             PageNumber = pageNumber;
             TotalPages = (int)Math.Ceiling(totalRequests / (double)PageSize);
@@ -77,7 +83,7 @@ namespace BookBorrowingSystem.Pages.Request
 
             _service.UpdateRequest(request);
 
-            return RedirectToPage(new { pageNumber = PageNumber });
+            return RedirectToPage(new { pageNumber = PageNumber, SearchRequestId, SearchUserName });
         }
     }
 }
