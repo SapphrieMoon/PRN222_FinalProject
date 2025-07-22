@@ -20,7 +20,11 @@ namespace DAL.Repositories
 
         public List<BorrowRequest> GetAll()
         {
-            return _context.BorrowRequests.OrderByDescending(i => i.RequestId).ToList(); // Assuming you want to return all requests as a list
+            return _context.BorrowRequests
+                .Include(r => r.Account)
+                .Include(r => r.ProcessedBy)
+                .OrderByDescending(i => i.RequestId)
+                .ToList();
         }
 
         public BorrowRequest GetById(int requestId)

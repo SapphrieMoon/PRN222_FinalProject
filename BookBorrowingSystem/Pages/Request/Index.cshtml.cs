@@ -8,17 +8,21 @@ namespace BookBorrowingSystem.Pages.Request
     public class IndexModel : PageModel
     {
         private readonly IRequestService _service;
+        private readonly IBookService _bookService;
+        private readonly IAccountService _accountSerice;
         private const int PageSize = 10;
 
-        public IndexModel(IRequestService service)
+        public IndexModel(IRequestService service, IBookService bookService, IAccountService accountSerice)
         {
             _service = service;
+            _bookService = bookService;
+            _accountSerice = accountSerice;
         }
 
         public List<RequestDTO> Requests { get; set; }
         public int PageNumber { get; set; }
         public int TotalPages { get; set; }
-        
+        public List<AccountResDTO> Accounts { get; set; }
 
         public void OnGet(int pageNumber = 1)
         {
@@ -62,6 +66,14 @@ namespace BookBorrowingSystem.Pages.Request
 
             request.Status = "Returned";
             request.ProcessedById = int.Parse(accountIdClaim.Value);
+
+            // Lấy Book và tăng Available
+            var book = _bookService.GetBookById(request.BookId);
+            if (book != null)
+            {
+                book.Avaliable += 1;
+                _bookService.UpdateBook(book);
+            }
 
             _service.UpdateRequest(request);
 

@@ -16,5 +16,7 @@ namespace BLL.DTOs
         public DateTime ReturnDate { get; set; }
         public string Status { get; set; } // e.g., "Pending", "Approved", "Rejected"
         public int? ProcessedById { get; set;  }
+        public string? ProcessedUserName {get; set; }
+        public string? AccountUserName {get; set; }
     }
 }
