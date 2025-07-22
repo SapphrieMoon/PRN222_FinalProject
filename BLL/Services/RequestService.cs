@@ -31,6 +31,8 @@ namespace BLL.Services
                 ReturnDate = r.ReturnDate,
                 Status = r.Status,
                 ProcessedById = r.ProcessedById,
+                ProcessedUserName = r.Account?.Username,
+                AccountUserName = r.Account?.Username
             }).ToList();
         }
 

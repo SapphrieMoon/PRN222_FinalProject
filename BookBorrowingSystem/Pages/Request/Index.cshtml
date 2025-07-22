@@ -30,12 +30,12 @@
                     <tr>
                         <td>@req.RequestId</td>
                         <td>@req.BookId</td>
-                        <td>@req.AccountId</td>
+                        <td>@req.AccountUserName</td>
                         <td>@req.RequestDate.ToString("dd-MM-yyyy")</td>
                         <td>@req.BorrowDate.ToString("dd-MM-yyyy")</td>
                         <td>@req.ReturnDate.ToString("dd-MM-yyyy")</td>
                         <td>@req.Status</td>
-                        <td>@req.ProcessedById</td>
+                        <td>@req.ProcessedUserName</td>
                         <td>
                             @if (req.Status == "Pending")
                             {
