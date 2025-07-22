@@ -18,9 +18,9 @@ namespace BLL.Services
             _repo = repo;
         }
 
-        public List<RequestDTO> GetAllRequests()
+        public List<RequestDTO> GetAllRequests(int? requestId, string? accountUserName)
         {
-            var requests = _repo.GetAll();
+            var requests = _repo.GetAll(requestId, accountUserName);
             return requests.Select(r => new RequestDTO
             {
                 RequestId = r.RequestId,
@@ -31,7 +31,7 @@ namespace BLL.Services
                 ReturnDate = r.ReturnDate,
                 Status = r.Status,
                 ProcessedById = r.ProcessedById,
-                ProcessedUserName = r.Account?.Username,
+                ProcessedUserName = r.ProcessedBy?.Username,
                 AccountUserName = r.Account?.Username
             }).ToList();
         }

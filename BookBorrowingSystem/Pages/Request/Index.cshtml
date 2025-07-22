@@ -6,13 +6,27 @@
 
 <h1 class="text-center my-4">All Borrow Requests</h1>
 
+<form method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="number" name="SearchRequestId" class="form-control" placeholder="Search by Request ID..." value="@Model.SearchRequestId" />
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="SearchUserName" class="form-control" placeholder="Search by User Name..." value="@Model.SearchUserName" />
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
 <div class="container">
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
                 <th>Request ID</th>
                 <th>Book ID</th>
-                <th>Account ID</th>
+                <th>User Name</th>
                 <th>Request Date</th>
                 <th>Borrow Date</th>
                 <th>Return Date</th>
@@ -67,16 +81,16 @@
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
-            <a class="page-link" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+            <a class="page-link" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-SearchRequestId="@Model.SearchRequestId" asp-route-SearchUserName="@Model.SearchUserName">Previous</a>
         </li>
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                <a class="page-link" asp-route-pageNumber="@i">@i</a>
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-SearchRequestId="@Model.SearchRequestId" asp-route-SearchUserName="@Model.SearchUserName">@i</a>
             </li>
         }
         <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
-            <a class="page-link" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+            <a class="page-link" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-SearchRequestId="@Model.SearchRequestId" asp-route-SearchUserName="@Model.SearchUserName">Next</a>
         </li>
     </ul>
 </nav>

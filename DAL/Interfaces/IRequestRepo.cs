@@ -9,7 +9,7 @@ namespace DAL.Interfaces
 {
     public interface IRequestRepo
     {
-        List<BorrowRequest> GetAll();
+        List<BorrowRequest> GetAll(int? requestId, string? accountUserName);
         BorrowRequest GetById(int RequestId);
         void Add(BorrowRequest request);
         void Update(BorrowRequest request);
