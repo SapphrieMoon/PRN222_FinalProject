@@ -15,7 +15,7 @@ namespace DAL.Extensions
             modelBuilder.Entity<Account>().HasData(
                 new Account { AccountId = 1, Username = "admin", Email = "admin@gmail.com", Password = "123", Role = "Admin" },
                 new Account { AccountId = 2, Username = "librarian", Email = "lib@gmail.com", Password = "123", Role = "Librarian" },
-                new Account { AccountId = 3, Username = "student", Email = "stu1@gmail.com", Password = "123", Role = "Student" }
+                new Account { AccountId = 3, Username = "student", Email = "stu1@gmail.com", Password = "123", Role = "User" }
             );
 
             modelBuilder.Entity<Book>().HasData(
