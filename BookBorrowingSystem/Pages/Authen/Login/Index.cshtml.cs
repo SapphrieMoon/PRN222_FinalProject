@@ -65,7 +65,7 @@ namespace BookBorrowingSystem.Pages.Authen.Login
             {
                 return RedirectToPage("/Request/Index");
             }
-            if (account.Role == "Student")
+            if (account.Role == "User")
             {
                 return RedirectToPage("/Book/Index");
             }

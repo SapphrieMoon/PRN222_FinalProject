@@ -1,0 +1,42 @@
+@page
+@model BookBorrowingSystem.Pages.Request.HistoryModel
+@{
+    ViewData["Title"] = "Lịch sử mượn sách của bạn";
+}
+
+<h2 class="text-center my-4">Lịch sử mượn sách của bạn</h2>
+
+@if (Model.UserRequests == null || !Model.UserRequests.Any())
+{
+    <div class="alert alert-info text-center">Bạn chưa có yêu cầu mượn sách nào.</div>
+}
+else
+{
+    <div class="container">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Request ID</th>
+                    <th>Book ID</th>
+                    <th>Request Date</th>
+                    <th>Borrow Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model.UserRequests)
+                {
+                    <tr>
+                        <td>@req.RequestId</td>
+                        <td>@req.BookId</td>
+                        <td>@req.RequestDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.BorrowDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.ReturnDate.ToString("dd-MM-yyyy")</td>
+                        <td>@req.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+} 
