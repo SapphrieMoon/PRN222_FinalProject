@@ -1,10 +1,10 @@
 ﻿using BLL.Interfaces;
 using BLL.DTOs;
 using DAL.Interfaces;
-<<<<<<< HEAD
-=======
+
+
 using DAL.Repositories;
->>>>>>> thien
+
 using DAL.Entities;
 
 namespace BLL.Services
