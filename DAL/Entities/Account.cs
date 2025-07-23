@@ -18,5 +18,10 @@ namespace DAL.Entities
 
         public ICollection<BorrowRequest>? BorrowRequests { get; set; }
         public ICollection<BorrowRequest>? ProcessedRequests { get; set; }
+
+        public static implicit operator Account(Account v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
