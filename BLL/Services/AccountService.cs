@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.DTOs;
 using DAL.Interfaces;
+using DAL.Entities;
 
 namespace BLL.Services
 {
@@ -29,5 +30,6 @@ namespace BLL.Services
                 AccountId = account.AccountId
             };
         }
+
     }
 }

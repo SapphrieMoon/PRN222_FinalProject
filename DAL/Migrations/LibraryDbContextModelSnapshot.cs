@@ -72,7 +72,7 @@ namespace DAL.Migrations
                             AccountId = 3,
                             Email = "stu1@gmail.com",
                             Password = "123",
-                            Role = "Student",
+                            Role = "User",
                             Username = "student"
                         });
                 });
@@ -173,10 +173,10 @@ namespace DAL.Migrations
                             RequestId = 1,
                             AccountId = 3,
                             BookId = 1,
-                            BorrowDate = new DateTime(2025, 7, 18, 0, 0, 0, 0, DateTimeKind.Local),
+                            BorrowDate = new DateTime(2025, 7, 24, 0, 0, 0, 0, DateTimeKind.Local),
                             ProcessedById = 2,
-                            RequestDate = new DateTime(2025, 7, 17, 0, 0, 0, 0, DateTimeKind.Local),
-                            ReturnDate = new DateTime(2025, 7, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            RequestDate = new DateTime(2025, 7, 23, 0, 0, 0, 0, DateTimeKind.Local),
+                            ReturnDate = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "PENDING"
                         });
                 });
