@@ -24,6 +24,7 @@ namespace BLL.DTOs
         public int AccountId { get; set; }
     }
 
+
     public class RegisterDTO
     {
         [Required]
@@ -38,4 +39,24 @@ namespace BLL.DTOs
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
     }
+
+    public class CreateAccountDTO
+    {
+        public required string UserName { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+        public string? Role { get; set; }
+    }
+
+    // Cập nhật tài khoản
+    public class UpdateAccountDTO
+    {
+        public int AccountId { get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? Role { get; set; }
+    }
+
+
 }
