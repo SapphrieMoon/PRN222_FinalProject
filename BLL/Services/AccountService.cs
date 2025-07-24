@@ -1,6 +1,10 @@
 ﻿using BLL.Interfaces;
 using BLL.DTOs;
 using DAL.Interfaces;
+
+
+using DAL.Repositories;
+
 using DAL.Entities;
 
 namespace BLL.Services
@@ -31,22 +35,11 @@ namespace BLL.Services
             };
         }
 
-        public List<AccountResDTO> GetAllAccounts()
-        {
-            var accounts = _repo.GetAll();
-            return accounts.Select(a => new AccountResDTO
-            {
-                Email = a.Email,
-                Password = a.Password,
-                UserName = a.Username,
-                Role = a.Role,
-                //AccountId = a.AccountId
-            }).ToList();
-        }
 
-        public AccountResDTO GetAccountById(int id)
+        
+        public async Task<AccountResDTO> GetById(int id)
         {
-            var account = _repo.GetById(id);
+            var account = await _repo.GetById(id);
             if (account == null)
             {
                 return null;
@@ -61,35 +54,74 @@ namespace BLL.Services
             };
         }
 
-        public void AddAccount(RegisterDTO accountDto)
+        public async Task CreateAccountAsync(CreateAccountDTO dto)
         {
             var account = new Account
             {
-                Username = accountDto.UserName,
-                Email = accountDto.Email,
-                Password = accountDto.Password,
-                Role = "User" // Default role, can be changed later
+                Username = dto.UserName,
+                Email = dto.Email,
+                Password = dto.Password, // Lưu plain text (chỉ dùng cho học tập)
+                Role = dto.Role
             };
-            _repo.Add(account);
+            await _repo.Add(account);
         }
 
-        public void UpdateAccount(AccountResDTO accountDto)
+        public async Task UpdateAccountAsync(UpdateAccountDTO dto)
         {
-            var account = _repo.GetById(accountDto.AccountId);
+   
+            var account = await _repo.GetById(dto.AccountId);
             if (account == null)
-            {
-                throw new Exception("Account not found");
-            }
-            account.Username = accountDto.UserName;
-            account.Email = accountDto.Email;
-            account.Password = accountDto.Password;
-            account.Role = accountDto.Role;
-            _repo.Update(account);
+                throw new KeyNotFoundException("Account not found.");
+
+            account.Username = dto.UserName ?? account.Username;
+            account.Email = dto.Email ?? account.Email;
+            account.Password = dto.Password ?? account.Password;
+            account.Role = dto.Role ?? account.Role;
+
+            await _repo.Update(account);
         }
 
-        public void DeleteAccount(int accountId)
+        public async Task Delete(int id)
         {
-            _repo.Delete(accountId);
+            var account = await _repo.GetById(id);
+            if (account == null) throw new KeyNotFoundException("Account not found.");
+
+            await _repo.Delete(id);
         }
+
+        public async Task<IEnumerable<AccountResDTO>> GetAllAccountsAsync()
+        {
+            var accounts = await _repo.GetAll();
+            return accounts.Select(a => new AccountResDTO
+            {
+                AccountId = a.AccountId,
+                UserName = a.Username,
+                Email = a.Email,
+                Role = a.Role
+            });
+        }
+
+        public async Task<AccountResDTO?> GetAccountByIdAsync(int id)
+        {
+            var account = await _repo.GetById(id);
+            return account == null ? null : new AccountResDTO
+            {
+                AccountId = account.AccountId,
+                UserName = account.Username,
+                Email = account.Email,
+                Role = account.Role
+            };
+        }
+
+        public async Task DeleteAccountAsync(int id)
+        {
+            var account = await _repo.GetById(id);
+            if (account == null) throw new KeyNotFoundException("Account not found.");
+
+            await _repo.Delete(id);
+        }
+
     }
+
 }
+

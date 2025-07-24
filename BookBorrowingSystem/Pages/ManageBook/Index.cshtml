@@ -1,0 +1,79 @@
+﻿@page
+@model BookBorrowingSystem.Pages.ManageBook.IndexModel
+
+@{
+    ViewData["Title"] = "Books Management";
+}
+
+<h1>Books Management</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Book</a>
+</p>
+
+@if (Model.Book != null && Model.Book.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Book[0].Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Book[0].Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Book[0].Quantity)
+                </th>
+                <th>
+                    Available
+                </th>
+                <th>
+                    Image
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Book)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Avaliable)
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="Book Image" style="width: 50px; height: 50px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No image</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-info">Details</a>
+                        <a asp-page="./Delete" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        <h4>No books found</h4>
+        <p>There are currently no books in the system. <a asp-page="Create">Add the first book</a>.</p>
+    </div>
+}
