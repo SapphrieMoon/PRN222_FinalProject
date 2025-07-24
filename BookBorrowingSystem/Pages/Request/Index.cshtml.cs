@@ -2,9 +2,11 @@ using BLL.DTOs;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookBorrowingSystem.Pages.Request
 {
+    [Authorize(Roles = "Librarian")]
     public class IndexModel : PageModel
     {
         private readonly IRequestService _service;
