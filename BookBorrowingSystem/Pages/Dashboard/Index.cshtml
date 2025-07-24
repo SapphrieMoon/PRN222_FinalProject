@@ -1,0 +1,541 @@
+﻿
+@page
+@model BookBorrowingSystem.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div class="d-none d-lg-inline-block text-muted">
+            <i class="fas fa-calendar fa-sm fa-fw mr-2"></i>
+            @DateTime.Now.ToString("MMMM dd, yyyy")
+        </div>
+    </div>
+
+    <!-- Date Filter Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-filter mr-2"></i>Report Filter
+            </h6>
+        </div>
+        <div class="card-body">
+            <form method="post" class="row align-items-end">
+                <div class="col-md-4">
+                    <label asp-for="FromDate" class="form-label">From Date:</label>
+                    <input asp-for="FromDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ToDate" class="form-label">To Date:</label>
+                    <input asp-for="ToDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary mr-2">
+                        <i class="fas fa-search mr-1"></i>Apply Filter
+                    </button>
+                    <a href="/Dashboard" class="btn btn-secondary">
+                        <i class="fas fa-undo mr-1"></i>Reset
+                    </a>
+                </div>
+            </form>
+            @if (Model.FromDate.HasValue || Model.ToDate.HasValue)
+            {
+                <div class="mt-3">
+                    <small class="text-info">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Showing data from 
+                        <strong>@(Model.FromDate?.ToString("MMM dd, yyyy") ?? "Beginning")</strong> 
+                        to 
+                        <strong>@(Model.ToDate?.ToString("MMM dd, yyyy") ?? "Now")</strong>
+                    </small>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Error/Validation Messages -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+    }
+
+    <!-- Statistics Cards Row -->
+    <div class="row">
+        <!-- Total Books Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Books
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalBooks</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Books Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Available Books
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAvailableBooks</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Borrowed Books Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Borrowed Books
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalBorrowedBooks</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hand-holding fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Users
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Statistics Row -->
+    <div class="row">
+        <!-- Pending Requests -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Pending Requests
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPendingRequests</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved Requests -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Approved Requests
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalApprovedRequests</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rejected Requests -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Rejected Requests
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRejectedRequests</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-times fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Requests -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Today's Requests
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRequestsToday</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <!-- Request Status Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Request Status Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="requestStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Requests Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Requests Trend</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="monthlyRequestsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Tables Row -->
+    <div class="row">
+        <!-- Recent Requests -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Requests</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model.RecentRequests)
+                                {
+                                    <tr>
+                                        <td>@request.RequestId</td>
+                                        <td>@(request.AccountUserName ?? "Unknown")</td>
+                                        <td>@request.RequestDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @if (request.Status?.ToUpper() == "PENDING")
+                                            {
+                                                <span class="badge" style="background-color: #ffc107; color: #212529;">@request.Status</span>
+                                            }
+                                            else if (request.Status?.ToUpper() == "APPROVED")
+                                            {
+                                                <span class="badge" style="background-color: #28a745; color: white;">@request.Status</span>
+                                            }
+                                            else if (request.Status?.ToUpper() == "REJECTED")
+                                            {
+                                                <span class="badge" style="background-color: #dc3545; color: white;">@request.Status</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge" style="background-color: #6c757d; color: white;">@request.Status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!Model.RecentRequests.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            @if (Model.FromDate.HasValue || Model.ToDate.HasValue)
+                                            {
+                                                <span>No requests found in the selected date range</span>
+                                            }
+                                            else
+                                            {
+                                                <span>No recent requests</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <script>
+        // Request Status Pie Chart
+        var ctx1 = document.getElementById("requestStatusChart");
+        var requestStatusChart = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.RequestStatusChart.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.RequestStatusChart.Values)),
+                    backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b'],
+                    hoverBackgroundColor: ['#f4b619', '#17a673', '#e02d1b'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                },
+                cutout: 80,
+            },
+        });
+
+        // Monthly Requests Line Chart
+        var ctx2 = document.getElementById("monthlyRequestsChart");
+        var monthlyLabels = @Html.Raw(Json.Serialize(Model.MonthlyRequestsChart.Keys));
+        var monthlyData = @Html.Raw(Json.Serialize(Model.MonthlyRequestsChart.Values));
+        
+        var monthlyRequestsChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: "Requests",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: monthlyData,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            callback: function(value, index, values) {
+                                return value;
+                            }
+                        },
+                        grid: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Popular Books Bar Chart
+        var ctx3 = document.getElementById("popularBooksChart");
+        var bookTitles = @Html.Raw(Json.Serialize(Model.PopularBooksChart.Select(x => x.BookTitle)));
+        var requestCounts = @Html.Raw(Json.Serialize(Model.PopularBooksChart.Select(x => x.RequestCount)));
+        
+        var popularBooksChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: bookTitles,
+                datasets: [{
+                    label: "Requests",
+                    backgroundColor: "#4e73df",
+                    hoverBackgroundColor: "#2e59d9",
+                    borderColor: "#4e73df",
+                    data: requestCounts,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            min: 0,
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            callback: function(value, index, values) {
+                                return value;
+                            }
+                        },
+                        grid: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Auto refresh every 5 minutes (disabled when using date filter)
+        @if (!Model.FromDate.HasValue && !Model.ToDate.HasValue)
+        {
+            <text>
+            setInterval(function() {
+                window.location.reload();
+            }, 300000);
+            </text>
+        }
+
+        // Set today's date as max for date inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const fromDateInput = document.querySelector('input[name="FromDate"]');
+            const toDateInput = document.querySelector('input[name="ToDate"]');
+            
+            if (fromDateInput) fromDateInput.setAttribute('max', today);
+            if (toDateInput) toDateInput.setAttribute('max', today);
+            
+            // Ensure FromDate <= ToDate
+            if (fromDateInput && toDateInput) {
+                fromDateInput.addEventListener('change', function() {
+                    toDateInput.setAttribute('min', this.value);
+                });
+                
+                toDateInput.addEventListener('change', function() {
+                    fromDateInput.setAttribute('max', this.value);
+                });
+            }
+        });
+    </script>
+}
