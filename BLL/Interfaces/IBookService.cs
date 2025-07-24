@@ -14,5 +14,6 @@ namespace BLL.Interfaces
         void AddBook(BookDTO book);
         void UpdateBook(BookDTO book);
         void DeleteBook(int bookId);
+        List<BookDTO> SearchBooksByName(string searchTerm);
     }
 }

@@ -48,5 +48,18 @@ namespace DAL.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public List<Book> SearchByName(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return GetAll();
+            }
+
+            return _context.Books
+                .AsNoTracking()
+                .Where(b => b.Title.Contains(searchTerm) || b.Author.Contains(searchTerm))
+                .ToList();
+        }
     }
 }

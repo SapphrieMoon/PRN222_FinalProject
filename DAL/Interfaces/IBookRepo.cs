@@ -14,5 +14,6 @@ namespace DAL.Interfaces
         void Add(Book book);
         void Update(Book book);
         void Delete(int bookId);
+        List<Book> SearchByName(string searchTerm);
     }
 }
