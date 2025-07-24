@@ -16,10 +16,20 @@ namespace BookBorrowingSystem.Pages.Book
 
         [BindProperty]
         public List<BookDTO> Books { get; set; } = new List<BookDTO>();
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; } = string.Empty;
+
         public void OnGet()
         {
-            Books = _service.GetAllBooks();
-
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                Books = _service.SearchBooksByName(SearchTerm);
+            }
+            else
+            {
+                Books = _service.GetAllBooks();
+            }
         }
     }
 }

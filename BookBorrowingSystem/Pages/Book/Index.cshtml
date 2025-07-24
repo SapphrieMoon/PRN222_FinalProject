@@ -10,7 +10,30 @@
 
 <h1 class="text-center my-4">Book List</h1>
 
-<div class="container" >
+<div class="container">
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form method="get" class="d-flex">
+                <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control me-2" 
+                       placeholder="Search by book title or author..." />
+                <button type="submit" class="btn btn-primary">Search</button>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <a href="/Book" class="btn btn-outline-secondary ms-2">Clear</a>
+                }
+            </form>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SearchTerm))
+    {
+        <div class="row mb-3">
+            <div class="col">
+                <p class="text-muted">Search results for "<strong>@Model.SearchTerm</strong>" - @Model.Books.Count book(s) found</p>
+            </div>
+        </div>
+    }
     
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var book in Model.Books)
@@ -38,6 +61,27 @@
             </div>
         }
     </div>
+
+    @if (Model.Books.Count == 0)
+    {
+        <div class="row">
+            <div class="col text-center mt-5">
+                <div class="alert alert-info">
+                    @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                    {
+                        <h5>No books found</h5>
+                        <p>No books match your search criteria "<strong>@Model.SearchTerm</strong>".</p>
+                        <a href="/Book" class="btn btn-primary">View All Books</a>
+                    }
+                    else
+                    {
+                        <h5>No books available</h5>
+                        <p>There are currently no books in the library.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <!--Modal-->

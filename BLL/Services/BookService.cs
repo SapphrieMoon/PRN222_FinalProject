@@ -80,5 +80,19 @@ namespace BLL.Services
         {
             _repo.Delete(bookId);
         }
+
+        public List<BookDTO> SearchBooksByName(string searchTerm)
+        {
+            var books = _repo.SearchByName(searchTerm);
+            return books.Select(b => new BookDTO
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Author = b.Author,
+                Quantity = b.Quantity,
+                Avaliable = b.Available,
+                ImagePath = b.ImagePath
+            }).ToList();
+        }
     }
 }
