@@ -5,7 +5,7 @@
 }
 
 <head>
-    <link rel="stylesheet" href="~/css/book.css" />
+    <link rel="stylesheet" href="~/css/Book.css" />
 </head>
 
 <h1 class="text-center my-4">Book List</h1>
@@ -38,10 +38,10 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var book in Model.Books)
         {
-            <div class="col" >
-                <div class="card h-100 book-card" 
+            @* <div class="col" >
+                <div class="card h-100 book-card p-2" 
                     @* data-bs-toggle="modal"
-                    data-bs-target="#requestModal" *@
+                    data-bs-target="#requestModal" *
                     data-book-id="@book.BookId"
                      data-avaliable="@book.Avaliable">
                     @if (!string.IsNullOrEmpty(book.ImagePath))
@@ -58,7 +58,52 @@
                         <p class="card-text"><strong>Available:</strong> @book.Avaliable / @book.Quantity</p>
                     </div>
                 </div>
+            </div> *@
+
+            <div class="col">
+                <div class="card h-100 book-card"
+                     data-book-id="@book.BookId"
+                     data-avaliable="@book.Avaliable">
+
+                    <div class="book-image-wrapper">
+                        @if (!string.IsNullOrEmpty(book.ImagePath))
+                        {
+                            <img src="@book.ImagePath" class="card-img-top" alt="Book cover">
+                        }
+                        else
+                        {
+                            <img src="/images/default-book.jpg" class="card-img-top" alt="Default cover" />
+                        }
+                    </div>
+
+                    <div class="highlight-strip" style="height: 6px; background-color: #7cb518;"></div>
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text"><strong>Author:</strong> @book.Author</p>
+                        @{
+                            double availableRatio = book.Quantity > 0 ? (double)book.Avaliable / book.Quantity : 0;
+                            string availableClass = "text-success";
+
+                            if (book.Avaliable == 0)
+                            {
+                                availableClass = "text-danger";
+                            }
+                            else if (availableRatio <= 0.5)
+                            {
+                                availableClass = "text-warning";
+                            }
+                        }
+                        <p class="card-text @availableClass">
+                            <strong>Available:</strong>
+                            <span>@book.Avaliable</span> / @book.Quantity
+                        </p>
+
+                    </div>
+                </div>
             </div>
+
         }
     </div>
 

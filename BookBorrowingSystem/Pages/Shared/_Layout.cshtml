@@ -20,7 +20,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">BookBorrowingSystem</a>
+                <img src="~/images/Logo.png" alt="PHAT Library" style="width: 60px; height: auto; margin-right: 5px;" />
+                @* <a class="navbar-brand" asp-area="" asp-page="/Index">BookBorrowingSystem</a> *@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -33,26 +34,28 @@
                         <!-- Dynamic links based on Role -->
                         @if (role == "User")
                         {
-                            <li class="nav-item">
+                            <a class="navbar-brand" asp-area="" asp-page="/Book/Index">PHAT Library</a>
+                            @* <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Book/Index">Book</a>
-                            </li>
-                            <li class="nav-item">
+                            </li> *@
+                             <li class="nav-item"> 
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Request/History">History</a>
-                            </li>
+                             </li> 
                         }
                         else if (role == "Librarian")
                         {
-                            <li class="nav-item">
+                            <a class="navbar-brand" asp-area="" asp-page="/Request/Index">PHAT Library</a>
+                            @* <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Request/Index">Request</a>
-                            </li>
+                            </li> *@
                         }
                         else if (role == "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Account/Index">Account</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Account/Index">Accounts Management</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/ManageBook/Index">Manage Books</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/ManageBook/Index">Books Management</a>
                             </li>
                         }
 
@@ -80,7 +83,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container text-center">
             &copy; 2025 - BookBorrowingSystem - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>

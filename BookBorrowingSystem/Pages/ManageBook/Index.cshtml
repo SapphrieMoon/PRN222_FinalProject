@@ -7,7 +7,7 @@
 
 <h1>Books Management</h1>
 
-<p>
+<p class="mt-2">
     <a asp-page="Create" class="btn btn-primary">Create New Book</a>
 </p>
 
@@ -62,7 +62,7 @@
                     </td>
                     <td>
                         <a asp-page="./Edit" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a asp-page="./Details" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-info">Details</a>
+                        <a asp-page="./Details" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-info my-1">Details</a>
                         <a asp-page="./Delete" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-danger">Delete</a>
                     </td>
                 </tr>
