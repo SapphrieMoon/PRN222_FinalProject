@@ -1,11 +1,13 @@
 using BLL.DTOs;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
 namespace BookBorrowingSystem.Pages.Request
 {
+    [Authorize(Roles = "Librarian")]
     public class HistoryModel : PageModel
     {
         private readonly IRequestService _requestService;

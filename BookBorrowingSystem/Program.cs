@@ -26,7 +26,7 @@ namespace BookBorrowingSystem
                 {
                     options.LoginPath = "/Authen/Login/Index"; // Đường dẫn đến trang đăng nhập
                     options.LogoutPath = "/Authen/Logout/Logout"; // Đường dẫn đến trang đăng xuất
-                    options.AccessDeniedPath = "/Authen/Login/Index"; // Đường dẫn đến trang từ chối truy cập
+                    options.AccessDeniedPath = "/Authen/AccessDenied/Index"; // Đường dẫn đến trang từ chối truy cập
                 });
             //-------------------------------------------- Account ---------------------------------------------------------------------
             builder.Services.AddScoped<IAccountService, AccountService>();
