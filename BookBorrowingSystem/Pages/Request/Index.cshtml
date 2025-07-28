@@ -6,19 +6,21 @@
 
 <h1 class="text-center my-4">All Borrow Requests</h1>
 
-<form method="get" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
-            <input type="number" name="SearchRequestId" class="form-control" placeholder="Search by Request ID..." value="@Model.SearchRequestId" />
-        </div>
-        <div class="col-md-4">
-            <input type="text" name="SearchUserName" class="form-control" placeholder="Search by User Name..." value="@Model.SearchUserName" />
-        </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </div>
-</form>
+<div class="d-flex justify-content-around">
+	<form method="get" class="mb-4">
+		<div class="row">
+			<div class="col-md-4 p-1">
+				<input type="number" name="SearchRequestId" class="form-control" placeholder="Request ID" value="@Model.SearchRequestId" />
+			</div>
+			<div class="col-md-4 p-1">
+				<input type="text" name="SearchUserName" class="form-control" placeholder="User Name" value="@Model.SearchUserName" />
+			</div>
+			<div class="col-md-4 p-1">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
 
 <div class="container">
     <table class="table table-bordered table-hover">
