@@ -31,6 +31,9 @@ namespace BookBorrowingSystem.Pages.Book
             {
                 Books = _service.GetAllBooks();
             }
+            
+            // Sort books by BookId in descending order to show the most recently added books first
+            Books = Books.OrderByDescending(b => b.BookId).ToList();
         }
     }
 }
