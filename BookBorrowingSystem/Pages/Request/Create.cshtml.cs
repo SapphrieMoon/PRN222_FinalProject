@@ -1,8 +1,10 @@
 ﻿using BLL.DTOs;
 using BLL.Interfaces;
+using BookBorrowingSystem.Pages.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BookBorrowingSystem.Pages.Request
 {
@@ -11,11 +13,12 @@ namespace BookBorrowingSystem.Pages.Request
     {
         private readonly IRequestService _requestService;
         private readonly IBookService _bookService;
-
-        public CreateModel(IRequestService requestService, IBookService bookService)
+        private readonly IHubContext<LibraryHub> _hubContext;
+        public CreateModel(IRequestService requestService, IBookService bookService, IHubContext<LibraryHub> hubContext)
         {
             _requestService = requestService;
             _bookService = bookService;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -49,7 +52,7 @@ namespace BookBorrowingSystem.Pages.Request
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             // Lấy AccountId từ user đăng nhập
             var accountIdClaim = User.FindFirst("AccountId");
@@ -73,7 +76,7 @@ namespace BookBorrowingSystem.Pages.Request
             Request.ProcessedById = null;
 
             _requestService.AddRequest(Request);
-
+            await _hubContext.Clients.All.SendAsync("ReloadBookIndex");
             var book = _bookService.GetBookById(Request.BookId);
             if (book != null && book.Avaliable > 0)
             {

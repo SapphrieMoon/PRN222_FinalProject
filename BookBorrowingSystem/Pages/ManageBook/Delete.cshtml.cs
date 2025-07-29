@@ -1,12 +1,10 @@
 ﻿using BLL.DTOs;
 using BLL.Interfaces;
+using BookBorrowingSystem.Pages.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BookBorrowingSystem.Pages.ManageBook
 {
@@ -14,10 +12,12 @@ namespace BookBorrowingSystem.Pages.ManageBook
     public class DeleteModel : PageModel
     {
         private readonly IBookService _bookService;
+        private readonly IHubContext<LibraryHub> _hubContext;
 
-        public DeleteModel(IBookService bookService)
+        public DeleteModel(IBookService bookService, IHubContext<LibraryHub> hubContext)
         {
             _bookService = bookService;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -53,6 +53,8 @@ namespace BookBorrowingSystem.Pages.ManageBook
                 try
                 {
                     _bookService.DeleteBook(id.Value);
+
+                    await _hubContext.Clients.All.SendAsync("ReloadBookIndex");
                     return RedirectToPage("./Index");
                 }
                 catch (Exception ex)

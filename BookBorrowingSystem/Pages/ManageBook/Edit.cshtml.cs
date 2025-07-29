@@ -1,14 +1,9 @@
-﻿using DAL;
-using DAL.Entities;
+﻿using BookBorrowingSystem.Pages.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BookEntity = DAL.Entities.Book;
 
 namespace BookBorrowingSystem.Pages.ManageBook
@@ -17,10 +12,11 @@ namespace BookBorrowingSystem.Pages.ManageBook
     public class EditModel : PageModel
     {
         private readonly DAL.LibraryDbContext _context;
-
-        public EditModel(DAL.LibraryDbContext context)
+        private readonly IHubContext<LibraryHub> _hubContext;
+        public EditModel(DAL.LibraryDbContext context, IHubContext<LibraryHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -56,6 +52,7 @@ namespace BookBorrowingSystem.Pages.ManageBook
             try
             {
                 await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("ReloadBookIndex");
             }
             catch (DbUpdateConcurrencyException)
             {
