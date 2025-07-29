@@ -1,8 +1,10 @@
 using BLL.DTOs;
 using BLL.Interfaces;
+using BookBorrowingSystem.Pages.Hubs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BookBorrowingSystem.Pages.Request
 {
@@ -12,13 +14,15 @@ namespace BookBorrowingSystem.Pages.Request
         private readonly IRequestService _service;
         private readonly IBookService _bookService;
         private readonly IAccountService _accountSerice;
+        private readonly IHubContext<LibraryHub> _hubContext;
         private const int PageSize = 10;
 
-        public IndexModel(IRequestService service, IBookService bookService, IAccountService accountSerice)
+        public IndexModel(IRequestService service, IBookService bookService, IAccountService accountSerice, IHubContext<LibraryHub> hubContext)
         {
             _service = service;
             _bookService = bookService;
             _accountSerice = accountSerice;
+            _hubContext = hubContext;
         }
 
         public List<RequestDTO> Requests { get; set; }
@@ -62,7 +66,7 @@ namespace BookBorrowingSystem.Pages.Request
             return RedirectToPage();
         }
 
-        public IActionResult OnPostReturn(int id)
+        public async Task<IActionResult> OnPostReturnAsync(int id)
         {
             var request = _service.GetRequestById(id);
             if (request == null)
@@ -84,7 +88,7 @@ namespace BookBorrowingSystem.Pages.Request
             }
 
             _service.UpdateRequest(request);
-
+            await _hubContext.Clients.All.SendAsync("ReloadBookIndex");
             return RedirectToPage(new { pageNumber = PageNumber, SearchRequestId, SearchUserName });
         }
     }
