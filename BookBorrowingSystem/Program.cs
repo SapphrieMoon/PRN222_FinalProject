@@ -16,6 +16,8 @@ namespace BookBorrowingSystem
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            // Add signalR
+            builder.Services.AddSignalR();
 
             //-------------------------------------------- Tạo và cấu hình DbContext với SQL Server --------------------------------------------
             builder.Services.AddDbContext<LibraryDbContext>(options =>
@@ -58,6 +60,8 @@ namespace BookBorrowingSystem
             app.UseAuthorization();
 
             app.MapRazorPages();
+            // Thêm SignalR Hub mapping
+            app.MapHub<Pages.Hubs.LibraryHub>("/libraryHub");
             //-------------------------------------------- Set trang đầu là Login --------------------------------------------
             app.MapGet("/", context =>
             {
