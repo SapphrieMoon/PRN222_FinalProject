@@ -43,7 +43,10 @@ namespace DAL.Repositories
         public BorrowRequest GetById(int requestId)
         {
             return _context.BorrowRequests
-                .AsNoTracking() //  thêm dòng này để không bị tracked
+                .Include(r => r.Account)
+                .Include(r => r.ProcessedBy)
+                .Include(r => r.Book)
+                .AsNoTracking()
                 .FirstOrDefault(x => x.RequestId == requestId);
         }
 

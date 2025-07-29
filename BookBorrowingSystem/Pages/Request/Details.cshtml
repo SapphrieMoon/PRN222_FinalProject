@@ -1,0 +1,176 @@
+﻿@page "{id:int}"
+@model BookBorrowingSystem.Pages.Request.DetailsModel
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Request Details
+                    </h2>
+                </div>
+                <div class="card-body">
+                    @if (Model.Request != null)
+                    {
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="alert alert-info d-flex align-items-center">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span>Request ID: <strong>@Model.Request.RequestId</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">
+                                            <i class="fas fa-book me-2"></i>Book Information
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>Book ID:</strong> @Model.Request.BookId<br>
+                                            <strong>Title:</strong> @(Model.Request.BookTitle ?? "N/A")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-success">
+                                            <i class="fas fa-user me-2"></i>Borrower Information
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>Account ID:</strong> @Model.Request.AccountId<br>
+                                            <strong>Username:</strong> @(Model.Request.AccountUserName ?? "N/A")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar-plus fa-2x text-warning mb-2"></i>
+                                        <h6 class="card-title">Request Date</h6>
+                                        <p class="card-text">@Model.Request.RequestDate.ToString("dd-MM-yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar-check fa-2x text-info mb-2"></i>
+                                        <h6 class="card-title">Borrow Date</h6>
+                                        <p class="card-text">@Model.Request.BorrowDate.ToString("dd-MM-yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar-times fa-2x text-danger mb-2"></i>
+                                        <h6 class="card-title">Return Date</h6>
+                                        <p class="card-text">@Model.Request.ReturnDate.ToString("dd-MM-yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-flag me-2"></i>Status
+                                        </h5>
+                                        <span class="badge fs-6 @(Model.Request.Status switch
+                                        {
+                                            "Pending" => "bg-warning text-dark",
+                                            "Borrowed" => "bg-info",
+                                            "Returned" => "bg-success",
+                                            "Rejected" => "bg-danger",
+                                            _ => "bg-secondary"
+                                        })">
+                                            @Model.Request.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-secondary">
+                                            <i class="fas fa-user-cog me-2"></i>Processed By
+                                        </h5>
+                                        <p class="card-text">
+                                            @if (Model.Request.ProcessedById.HasValue)
+                                            {
+                                                <strong>ID:</strong> @Model.Request.ProcessedById
+
+                                                <br>
+                                                <strong>Name:</strong> @(Model.Request.ProcessedUserName ?? "N/A")
+                                            }
+                                            else
+                                            {
+                                                <em class="text-muted">Not processed yet</em>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <a href="/Request" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Requests
+                                    </a>
+
+                                    @if (Model.Request.Status == "Pending")
+                                    {
+                                        <div>
+                                            <form method="post" asp-page="/Request/Index" asp-page-handler="Borrow" asp-route-id="@Model.Request.RequestId" style="display:inline;">
+                                                <button type="submit" class="btn btn-success me-2">
+                                                    <i class="fas fa-check me-2"></i>Approve Borrow
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else if (Model.Request.Status == "Borrowed")
+                                    {
+                                        <form method="post" asp-page="/Request/Index" asp-page-handler="Return" asp-route-id="@Model.Request.RequestId" style="display:inline;">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-undo me-2"></i>Process Return
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Request not found.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

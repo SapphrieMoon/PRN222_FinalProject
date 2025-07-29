@@ -50,7 +50,11 @@ namespace BLL.Services
                 BorrowDate = request.BorrowDate,
                 ReturnDate = request.ReturnDate,
                 Status = request.Status,
-                ProcessedById = request.ProcessedById
+                ProcessedById = request.ProcessedById,
+                ProcessedUserName = request.ProcessedBy?.Username,
+                AccountUserName = request.Account?.Username,
+                BookTitle = request.Book?.Title
+
             };
         }
         
