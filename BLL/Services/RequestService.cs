@@ -33,6 +33,7 @@ namespace BLL.Services
                 ProcessedById = r.ProcessedById,
                 ProcessedUserName = r.ProcessedBy?.Username,
                 AccountUserName = r.Account?.Username
+                BookTitle = r.Book?.Title
             }).ToList();
         }
 
