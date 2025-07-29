@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace BookBorrowingSystem.Pages.Request
 {
-    [Authorize(Roles = "Librarian")]
+    [Authorize()]
     public class HistoryModel : PageModel
     {
         private readonly IRequestService _requestService;
