@@ -23,6 +23,7 @@ namespace DAL.Repositories
             var query = _context.BorrowRequests
                 .Include(r => r.Account)
                 .Include(r => r.ProcessedBy)
+                .Include(r => r.Book)
                 .OrderByDescending(i => i.RequestId)
                 .AsQueryable();
 
