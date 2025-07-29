@@ -110,7 +110,7 @@ namespace BookBorrowingSystem.Pages.Dashboard
             var filteredRequests = FilterRequestsByDate(allRequests);
 
             TotalPendingRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "PENDING");
-            TotalApprovedRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "APPROVED");
+            TotalApprovedRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "BORROWED");
             TotalRequestsToday = allRequests.Count(r => r.RequestDate.Date == DateTime.Today);
         }
 
@@ -155,7 +155,7 @@ namespace BookBorrowingSystem.Pages.Dashboard
             RequestStatusChart = new Dictionary<string, int>
             {
                 ["Pending"] = filteredRequests.Count(r => r.Status?.ToUpper() == "PENDING"),
-                ["Approved"] = filteredRequests.Count(r => r.Status?.ToUpper() == "APPROVED")
+                ["Approved"] = filteredRequests.Count(r => r.Status?.ToUpper() == "BORROWED")
             };
 
             // Monthly requests within the selected date range
