@@ -32,7 +32,7 @@ namespace BLL.Services
                 Status = r.Status,
                 ProcessedById = r.ProcessedById,
                 ProcessedUserName = r.ProcessedBy?.Username,
-                AccountUserName = r.Account?.Username
+                AccountUserName = r.Account?.Username,
                 BookTitle = r.Book?.Title
             }).ToList();
         }
