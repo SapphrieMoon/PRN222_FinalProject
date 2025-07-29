@@ -32,7 +32,6 @@ namespace BookBorrowingSystem.Pages.Dashboard
         public int TotalAdmins { get; set; }
         public int TotalPendingRequests { get; set; }
         public int TotalApprovedRequests { get; set; }
-        public int TotalRejectedRequests { get; set; }
         public int TotalRequestsToday { get; set; }
 
         // Lists for detailed views
@@ -112,7 +111,6 @@ namespace BookBorrowingSystem.Pages.Dashboard
 
             TotalPendingRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "PENDING");
             TotalApprovedRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "APPROVED");
-            TotalRejectedRequests = filteredRequests.Count(r => r.Status?.ToUpper() == "REJECTED");
             TotalRequestsToday = allRequests.Count(r => r.RequestDate.Date == DateTime.Today);
         }
 
@@ -153,12 +151,11 @@ namespace BookBorrowingSystem.Pages.Dashboard
             var allRequests = _requestService.GetAllRequests(null, null);
             var filteredRequests = FilterRequestsByDate(allRequests);
 
-            // Request status distribution from filtered data
+            // Request status distribution from filtered data (removed rejected)
             RequestStatusChart = new Dictionary<string, int>
             {
                 ["Pending"] = filteredRequests.Count(r => r.Status?.ToUpper() == "PENDING"),
-                ["Approved"] = filteredRequests.Count(r => r.Status?.ToUpper() == "APPROVED"),
-                ["Rejected"] = filteredRequests.Count(r => r.Status?.ToUpper() == "REJECTED")
+                ["Approved"] = filteredRequests.Count(r => r.Status?.ToUpper() == "APPROVED")
             };
 
             // Monthly requests within the selected date range
