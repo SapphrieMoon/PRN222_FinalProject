@@ -18,5 +18,6 @@ namespace BLL.DTOs
         public int? ProcessedById { get; set;  }
         public string? ProcessedUserName {get; set; }
         public string? AccountUserName {get; set; }
+        public string? BookTitle { get; set; }
     }
 }
